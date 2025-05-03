@@ -4,7 +4,7 @@ import spacy  # type: ignore
 # Load spaCy small english language model
 nlp = spacy.load("en_core_web_sm")
 
-# Task list
+# Task list - will store dictionaries: {'task': description, 'time': minutes}
 tasks = []
 
 # Define intents and associated keywords
@@ -14,6 +14,70 @@ intents = {
     "show_tasks": ["show", "list", "display", "view"],
     "exit": ["exit", "quit", "bye"]
 }
+
+def estimate_task_time(task_description):
+    """Estimates the time required for a task based on keywords."""
+    doc = nlp(task_description.lower())
+    # Default to 1 hour 51 minutes (in minutes) if no specific keywords found
+    time_minutes = 111
+
+    # Keywords indicating duration (values in minutes)
+    time_hints = {
+        # Short tasks
+        "email": 10, "call": 15, "quick": 15, "reply": 10, "message": 5, "text": 5,
+        "buy": 30, "groceries": 45, "shop": 45, "errand": 30, "check": 10,
+        # Medium tasks
+        "meeting": 60, "schedule": 20, "plan": 90, "review": 45, "read": 60, "watch": 90,
+        "organize": 75, "clean": 90, "fix": 60,
+        # Long tasks
+        "project": 240, "report": 180, "research": 120, "write": 120, "develop": 300, "build": 300,
+        "assignment": 180, "presentation": 150, "study": 120, "learn": 180
+    }
+
+    found_hint = False
+    # Check tokens first for direct hints
+    for token in doc:
+        if token.lemma_ in time_hints:
+            time_minutes = time_hints[token.lemma_]
+            found_hint = True
+            break
+
+    # If no direct token hint, check noun chunks
+    if not found_hint:
+        for chunk in doc.noun_chunks:
+             # Check individual words within the chunk
+             for word in chunk.text.split():
+                 if word in time_hints:
+                     time_minutes = time_hints[word]
+                     found_hint = True
+                     break # Use first hint found in the chunk
+             if found_hint:
+                 break # Exit outer loop once hint found
+
+    return time_minutes
+
+def format_time(minutes):
+    """Formats minutes into a human-readable string."""
+    if minutes < 1:
+        return "< 1 min"
+    if minutes < 60:
+        return f"{minutes} mins"
+    elif minutes < 60 * 24:
+        hours = minutes // 60
+        rem_minutes = minutes % 60
+        if rem_minutes == 0:
+            return f"{hours} hr{'s' if hours > 1 else ''}"
+        else:
+            # Only show minutes if significant (e.g., avoid "1 hr 0 mins")
+            return f"{hours} hr{'s' if hours > 1 else ''} {rem_minutes} mins"
+    else:
+        days = minutes // (60 * 24)
+        rem_hours = (minutes % (60 * 24)) // 60
+        if rem_hours == 0:
+             return f"{days} day{'s' if days > 1 else ''}"
+        else:
+             # Approximate days/hours for simplicity if needed, or be more precise:
+             return f"{days} day{'s' if days > 1 else ''} {rem_hours} hr{'s' if rem_hours > 1 else ''}"
 
 def identify_intent_and_entity(user_input):
     """
@@ -57,32 +121,49 @@ def identify_intent_and_entity(user_input):
 
 def process_input(user_input):
     """
-    Process user input, determine intent and entity, and respond accordingly.
+    Process user input, determine intent and entity, estimate time,
+    prioritize, and respond accordingly.
     """
     intent, entity = identify_intent_and_entity(user_input)
 
     # Handle intents
     if intent == "add_task":
         if entity:
-            tasks.append(entity)
-            return f"Task '{entity}' added to your list!"
+            estimated_time = estimate_task_time(entity)
+            task_item = {'task': entity, 'time': estimated_time}
+            tasks.append(task_item)
+            # Sort tasks immediately after adding, shortest first
+            tasks.sort(key=lambda x: x['time'])
+            return f"Task '{entity}' (est. {format_time(estimated_time)}) added to your list!"
         else:
             return "I didn't catch what task to add. Could you clarify?"
 
     elif intent == "remove_task":
         if entity:
-            if entity in tasks:
-                tasks.remove(entity)
-                return f"Task '{entity}' removed from your list!"
-            else:
-                return f"Task '{entity}' not found in your list."
+            task_found = False
+            # Iterate backwards to safely remove items
+            for i in range(len(tasks) - 1, -1, -1):
+                 # Simple substring matching for removal for flexibility
+                 # Or use exact match: if tasks[i]['task'] == entity:
+                if entity in tasks[i]['task']:
+                    removed_task = tasks.pop(i)
+                    task_found = True
+                    # Removed the first match found when iterating backwards
+                    return f"Task '{removed_task['task']}' removed from your list!"
+
+            if not task_found:
+                 return f"Task containing '{entity}' not found in your list."
         else:
             return "I didn't catch what task to remove. Could you clarify?"
 
     elif intent == "show_tasks":
         if tasks:
-            task_list = "\n".join(f"- {task}" for task in tasks)
-            return f"Here are your tasks:\n{task_list}"
+            # Ensure tasks are sorted by time before displaying
+            tasks.sort(key=lambda x: x['time'])
+            # Format list with estimated time
+            task_items_formatted = [f"- {item['task']} (~{format_time(item['time'])})" for item in tasks]
+            task_list = "\n".join(task_items_formatted)
+            return f"Here are your tasks (prioritized by estimated time):\n{task_list}"
         else:
             return "Your task list is empty!"
 

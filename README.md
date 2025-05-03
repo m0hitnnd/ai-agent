@@ -19,6 +19,12 @@ To run either version of the agent, navigate to the project's root directory in 
 python AgentTodo/nlp/agent_todo_nlp.py
 ```
 
+if using python3
+
+```bash
+python3 AgentTodo/nlp/agent_todo_nlp.py
+```
+
 *(Note: You might need to install spaCy and its English language model first: `pip install spacy && python -m spacy download en_core_web_sm`)*
 
 **To run the Rule-Based version:**
@@ -26,4 +32,11 @@ python AgentTodo/nlp/agent_todo_nlp.py
 ```bash
 python AgentTodo/rule-based/agent_todo_rule_based.py
 ```
+
+if using python3
+
+```bash
+python3 AgentTodo/rule-based/agent_todo_rule_based.py
+```
+
 

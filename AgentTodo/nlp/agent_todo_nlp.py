@@ -1,8 +1,8 @@
 import os
-import re
 import openai
-import json 
+import json
 from dotenv import load_dotenv
+import db_utils
 
 # Load environment variables from .env file
 load_dotenv()
@@ -95,42 +95,48 @@ def process_input(user_input):
     # Handle intents based on LLM analysis
     if intent == "add_task":
         if entity:
-            # Time estimation is now part of the analysis
             if estimated_time is None:
-                 print(f"Warning: LLM provided add_task intent for '{entity}' but no time estimate. Defaulting to 60.")
-                 estimated_time = 60 # Default if LLM forgets
+                print(f"Warning: LLM provided add_task intent for '{entity}' but no time estimate. Defaulting to 60.")
+                estimated_time = 60
             task_item = {'task': entity, 'time': estimated_time}
             tasks.append(task_item)
-            tasks.sort(key=lambda x: (x['time'] is None, x['time'])) # Sort, handling None
+            try:
+                db_utils.add_task_to_db(entity, estimated_time)
+            except Exception as e:
+                print(f"[DB ERROR] Failed to add task to DB: {e}")
+            tasks.sort(key=lambda x: (x['time'] is None, x['time']))
             return f"Task '{entity}' (est. {format_time(estimated_time)}) added to your list!"
         else:
-            # Ask LLM to re-phrase if entity is missing?
-            # For now, use a generic message
             return "I understood you want to add a task, but couldn't identify what. Could you be more specific?"
 
     elif intent == "remove_task":
         if entity:
             task_found = False
-            # Iterate backwards to safely remove items
             for i in range(len(tasks) - 1, -1, -1):
-                 # Using 'in' for flexible matching based on LLM entity extraction
-                 # Consider exact match if LLM entity extraction is reliable:
-                 # if tasks[i]['task'].lower() == entity.lower():
                 if entity.lower() in tasks[i]['task'].lower():
                     removed_task = tasks.pop(i)
+                    try:
+                        db_utils.remove_task_from_db(entity)
+                    except Exception as e:
+                        print(f"[DB ERROR] Failed to remove task from DB: {e}")
                     task_found = True
                     return f"Task '{removed_task['task']}' removed from your list!"
-
             if not task_found:
-                 # Use entity provided by LLM in the message
-                 return f"Could not find a task related to '{entity}' in your list."
+                return f"Could not find a task related to '{entity}' in your list."
         else:
-             # Ask LLM to re-phrase?
             return "I understood you want to remove a task, but couldn't identify which one. Could you specify?"
 
     elif intent == "show_tasks":
+        try:
+            db_tasks = db_utils.get_all_tasks_from_db()
+            if db_tasks:
+                tasks.clear()
+                for t, tm in db_tasks:
+                    tasks.append({'task': t, 'time': tm})
+        except Exception as e:
+            print(f"[DB ERROR] Failed to fetch tasks from DB: {e}")
         if tasks:
-            tasks.sort(key=lambda x: (x['time'] is None, x['time'])) # Sort, handling None
+            tasks.sort(key=lambda x: (x['time'] is None, x['time']))
             task_items_formatted = [f"- {item['task']} (~{format_time(item['time'])})" for item in tasks]
             task_list = "\n".join(task_items_formatted)
             return f"Here are your tasks (prioritized by estimated time):\n{task_list}"
@@ -140,11 +146,12 @@ def process_input(user_input):
     elif intent == "exit":
         return "Goodbye! Have a productive day!"
 
-    else: # Handles 'unknown' intent
+    else:
         return "Sorry, I didn't quite understand that. Could you please rephrase? You can add, remove, or show tasks."
 
 # Main loop to interact with the AI agent
 def to_do_list_agent():
+    db_utils.init_db()
     print("Hi! I'm your To-Do List Manager. You can type things like:")
     print("- 'Add groceries to my list.'")
     print("- 'Can you show my tasks?'")

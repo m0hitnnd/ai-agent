@@ -1,0 +1,54 @@
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from typing import List, Optional
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), 'nlp'))
+import db_utils
+from nlp.agent_todo_nlp import get_llm_command_analysis
+
+# Ensure DB is initialized
+try: 
+    db_utils.init_db()
+except Exception as e:
+    print(f"Warning: Could not initialize DB: {e}")
+
+app = FastAPI()
+
+class TaskCreate(BaseModel):
+    task: str
+    time: Optional[int] = None
+
+class Task(BaseModel):
+    id: int
+    task: str
+    time: Optional[int]
+
+@app.get("/tasks", response_model=List[Task])
+def list_tasks():
+    rows = db_utils.get_all_tasks_with_ids()
+    return [Task(id=row[0], task=row[1], time=row[2]) for row in rows]
+
+@app.post("/tasks", response_model=Task)
+def add_task(task: TaskCreate):
+    # If time is not provided, estimate using LLM
+    if task.time is None:
+        analysis = get_llm_command_analysis(task.task)
+        estimated_time = analysis.get("estimated_time")
+        # Fallback if LLM fails to provide time
+        time_value = estimated_time if estimated_time is not None else 60
+    else:
+        time_value = task.time
+
+    db_utils.add_task_to_db(task.task, time_value)
+    row = db_utils.get_last_inserted_task()
+    return Task(id=row[0], task=row[1], time=row[2])
+
+@app.delete("/tasks/{task_id}")
+def delete_task(task_id: int):
+    deleted = db_utils.delete_task_by_id(task_id)
+    if deleted == 0:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return {"detail": "Task deleted"}
+
+# To run: uvicorn api_server:app --reload --port 8000

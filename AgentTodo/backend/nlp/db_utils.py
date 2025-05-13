@@ -1,7 +1,8 @@
 import sqlite3
 from contextlib import closing
+import os
 
-DB_PATH = 'AgentTodo/backend/nlp/tasks.db'
+DB_PATH = os.path.join(os.path.dirname(__file__), 'tasks.db')
 
 def init_db():
     with sqlite3.connect(DB_PATH) as conn:
@@ -26,6 +27,24 @@ def get_all_tasks_from_db():
         with closing(conn.cursor()) as c:
             c.execute('SELECT task, time FROM tasks')
             return c.fetchall()
+
+def get_all_tasks_with_ids():
+    with sqlite3.connect(DB_PATH) as conn:
+        with closing(conn.cursor()) as c:
+            c.execute('SELECT id, task, time FROM tasks')
+            return c.fetchall()
+
+def get_last_inserted_task():
+    with sqlite3.connect(DB_PATH) as conn:
+        with closing(conn.cursor()) as c:
+            c.execute('SELECT id, task, time FROM tasks ORDER BY id DESC LIMIT 1')
+            return c.fetchone()
+
+def delete_task_by_id(task_id):
+    with sqlite3.connect(DB_PATH) as conn:
+        with closing(conn.cursor()) as c:
+            c.execute('DELETE FROM tasks WHERE id = ?', (task_id,))
+            return c.rowcount
 
 def remove_task_from_db(task):
     with sqlite3.connect(DB_PATH) as conn:

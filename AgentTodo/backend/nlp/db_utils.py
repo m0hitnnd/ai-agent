@@ -1,7 +1,7 @@
 import sqlite3
 from contextlib import closing
 
-DB_PATH = 'tasks.db'
+DB_PATH = 'AgentTodo/backend/nlp/tasks.db'
 
 def init_db():
     with sqlite3.connect(DB_PATH) as conn:

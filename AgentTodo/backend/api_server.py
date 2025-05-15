@@ -6,6 +6,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), 'nlp'))
 import db_utils
 from nlp.agent_todo_nlp import get_llm_command_analysis
+from fastapi.middleware.cors import CORSMiddleware
 
 # Ensure DB is initialized
 try: 
@@ -14,6 +15,15 @@ except Exception as e:
     print(f"Warning: Could not initialize DB: {e}")
 
 app = FastAPI()
+
+# Add CORS middleware to allow requests from your iOS app
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Replace with your iOS app's domain in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class TaskCreate(BaseModel):
     task: str
@@ -51,4 +61,10 @@ def delete_task(task_id: int):
         raise HTTPException(status_code=404, detail="Task not found")
     return {"detail": "Task deleted"}
 
+# Add a simple health check endpoint
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
+
 # To run: uvicorn api_server:app --reload --port 8000
+# In production, this is handled by the Procfile and environment variables

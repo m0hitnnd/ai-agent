@@ -12,37 +12,37 @@
 			containerPortal = A53B89E12DD4CE8C00D4F21F /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A53B89E82DD4CE8C00D4F21F;
-			remoteInfo = TodoApp;
+			remoteInfo = DexterAI;
 		};
 		A53B8A022DD4CE8E00D4F21F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A53B89E12DD4CE8C00D4F21F /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = A53B89E82DD4CE8C00D4F21F;
-			remoteInfo = TodoApp;
+			remoteInfo = DexterAI;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A53B89E92DD4CE8C00D4F21F /* TodoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A53B89F72DD4CE8E00D4F21F /* TodoAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodoAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A53B8A012DD4CE8E00D4F21F /* TodoAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TodoAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A53B89E92DD4CE8C00D4F21F /* DexterAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DexterAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A53B89F72DD4CE8E00D4F21F /* DexterAITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DexterAITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A53B8A012DD4CE8E00D4F21F /* DexterAIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DexterAIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		A53B89EB2DD4CE8C00D4F21F /* TodoApp */ = {
+		A53B89EB2DD4CE8C00D4F21F /* DexterAI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TodoApp;
+			path = DexterAI;
 			sourceTree = "<group>";
 		};
-		A53B89FA2DD4CE8E00D4F21F /* TodoAppTests */ = {
+		A53B89FA2DD4CE8E00D4F21F /* DexterAITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TodoAppTests;
+			path = DexterAITests;
 			sourceTree = "<group>";
 		};
-		A53B8A042DD4CE8E00D4F21F /* TodoAppUITests */ = {
+		A53B8A042DD4CE8E00D4F21F /* DexterAIUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = TodoAppUITests;
+			path = DexterAIUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,9 +75,9 @@
 		A53B89E02DD4CE8C00D4F21F = {
 			isa = PBXGroup;
 			children = (
-				A53B89EB2DD4CE8C00D4F21F /* TodoApp */,
-				A53B89FA2DD4CE8E00D4F21F /* TodoAppTests */,
-				A53B8A042DD4CE8E00D4F21F /* TodoAppUITests */,
+				A53B89EB2DD4CE8C00D4F21F /* DexterAI */,
+				A53B89FA2DD4CE8E00D4F21F /* DexterAITests */,
+				A53B8A042DD4CE8E00D4F21F /* DexterAIUITests */,
 				A53B89EA2DD4CE8C00D4F21F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -85,9 +85,9 @@
 		A53B89EA2DD4CE8C00D4F21F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A53B89E92DD4CE8C00D4F21F /* TodoApp.app */,
-				A53B89F72DD4CE8E00D4F21F /* TodoAppTests.xctest */,
-				A53B8A012DD4CE8E00D4F21F /* TodoAppUITests.xctest */,
+				A53B89E92DD4CE8C00D4F21F /* DexterAI.app */,
+				A53B89F72DD4CE8E00D4F21F /* DexterAITests.xctest */,
+				A53B8A012DD4CE8E00D4F21F /* DexterAIUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -95,9 +95,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A53B89E82DD4CE8C00D4F21F /* TodoApp */ = {
+		A53B89E82DD4CE8C00D4F21F /* DexterAI */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A53B8A0B2DD4CE8E00D4F21F /* Build configuration list for PBXNativeTarget "TodoApp" */;
+			buildConfigurationList = A53B8A0B2DD4CE8E00D4F21F /* Build configuration list for PBXNativeTarget "DexterAI" */;
 			buildPhases = (
 				A53B89E52DD4CE8C00D4F21F /* Sources */,
 				A53B89E62DD4CE8C00D4F21F /* Frameworks */,
@@ -108,18 +108,18 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A53B89EB2DD4CE8C00D4F21F /* TodoApp */,
+				A53B89EB2DD4CE8C00D4F21F /* DexterAI */,
 			);
-			name = TodoApp;
+			name = DexterAI;
 			packageProductDependencies = (
 			);
-			productName = TodoApp;
-			productReference = A53B89E92DD4CE8C00D4F21F /* TodoApp.app */;
+			productName = DexterAI;
+			productReference = A53B89E92DD4CE8C00D4F21F /* DexterAI.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A53B89F62DD4CE8E00D4F21F /* TodoAppTests */ = {
+		A53B89F62DD4CE8E00D4F21F /* DexterAITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A53B8A0E2DD4CE8E00D4F21F /* Build configuration list for PBXNativeTarget "TodoAppTests" */;
+			buildConfigurationList = A53B8A0E2DD4CE8E00D4F21F /* Build configuration list for PBXNativeTarget "DexterAITests" */;
 			buildPhases = (
 				A53B89F32DD4CE8E00D4F21F /* Sources */,
 				A53B89F42DD4CE8E00D4F21F /* Frameworks */,
@@ -131,18 +131,18 @@
 				A53B89F92DD4CE8E00D4F21F /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				A53B89FA2DD4CE8E00D4F21F /* TodoAppTests */,
+				A53B89FA2DD4CE8E00D4F21F /* DexterAITests */,
 			);
-			name = TodoAppTests;
+			name = DexterAITests;
 			packageProductDependencies = (
 			);
-			productName = TodoAppTests;
-			productReference = A53B89F72DD4CE8E00D4F21F /* TodoAppTests.xctest */;
+			productName = DexterAITests;
+			productReference = A53B89F72DD4CE8E00D4F21F /* DexterAITests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		A53B8A002DD4CE8E00D4F21F /* TodoAppUITests */ = {
+		A53B8A002DD4CE8E00D4F21F /* DexterAIUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A53B8A112DD4CE8E00D4F21F /* Build configuration list for PBXNativeTarget "TodoAppUITests" */;
+			buildConfigurationList = A53B8A112DD4CE8E00D4F21F /* Build configuration list for PBXNativeTarget "DexterAIUITests" */;
 			buildPhases = (
 				A53B89FD2DD4CE8E00D4F21F /* Sources */,
 				A53B89FE2DD4CE8E00D4F21F /* Frameworks */,
@@ -154,13 +154,13 @@
 				A53B8A032DD4CE8E00D4F21F /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				A53B8A042DD4CE8E00D4F21F /* TodoAppUITests */,
+				A53B8A042DD4CE8E00D4F21F /* DexterAIUITests */,
 			);
-			name = TodoAppUITests;
+			name = DexterAIUITests;
 			packageProductDependencies = (
 			);
-			productName = TodoAppUITests;
-			productReference = A53B8A012DD4CE8E00D4F21F /* TodoAppUITests.xctest */;
+			productName = DexterAIUITests;
+			productReference = A53B8A012DD4CE8E00D4F21F /* DexterAIUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -186,7 +186,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A53B89E42DD4CE8C00D4F21F /* Build configuration list for PBXProject "TodoApp" */;
+			buildConfigurationList = A53B89E42DD4CE8C00D4F21F /* Build configuration list for PBXProject "DexterAI" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -200,9 +200,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A53B89E82DD4CE8C00D4F21F /* TodoApp */,
-				A53B89F62DD4CE8E00D4F21F /* TodoAppTests */,
-				A53B8A002DD4CE8E00D4F21F /* TodoAppUITests */,
+				A53B89E82DD4CE8C00D4F21F /* DexterAI */,
+				A53B89F62DD4CE8E00D4F21F /* DexterAITests */,
+				A53B8A002DD4CE8E00D4F21F /* DexterAIUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -258,12 +258,12 @@
 /* Begin PBXTargetDependency section */
 		A53B89F92DD4CE8E00D4F21F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A53B89E82DD4CE8C00D4F21F /* TodoApp */;
+			target = A53B89E82DD4CE8C00D4F21F /* DexterAI */;
 			targetProxy = A53B89F82DD4CE8E00D4F21F /* PBXContainerItemProxy */;
 		};
 		A53B8A032DD4CE8E00D4F21F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A53B89E82DD4CE8C00D4F21F /* TodoApp */;
+			target = A53B89E82DD4CE8C00D4F21F /* DexterAI */;
 			targetProxy = A53B8A022DD4CE8E00D4F21F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -390,7 +390,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = TodoApp/TodoApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = DexterAI/DexterAI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 56X5D49W54;
@@ -412,7 +412,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mohitnnd.TodoApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mohitnnd.DexterAI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -429,7 +429,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = TodoApp/TodoApp.entitlements;
+				CODE_SIGN_ENTITLEMENTS = DexterAI/DexterAI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 56X5D49W54;
@@ -451,7 +451,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mohitnnd.TodoApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mohitnnd.DexterAI;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -474,14 +474,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mohitnnd.TodoAppTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mohitnnd.DexterAITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TodoApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TodoApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DexterAI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DexterAI";
 				XROS_DEPLOYMENT_TARGET = 2.4;
 			};
 			name = Debug;
@@ -497,14 +497,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mohitnnd.TodoAppTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mohitnnd.DexterAITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TodoApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TodoApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DexterAI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/DexterAI";
 				XROS_DEPLOYMENT_TARGET = 2.4;
 			};
 			name = Release;
@@ -519,14 +519,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mohitnnd.TodoAppUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mohitnnd.DexterAIUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = TodoApp;
+				TEST_TARGET_NAME = DexterAI;
 				XROS_DEPLOYMENT_TARGET = 2.4;
 			};
 			name = Debug;
@@ -541,14 +541,14 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
 				MACOSX_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mohitnnd.TodoAppUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mohitnnd.DexterAIUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_TARGET_NAME = TodoApp;
+				TEST_TARGET_NAME = DexterAI;
 				XROS_DEPLOYMENT_TARGET = 2.4;
 			};
 			name = Release;
@@ -556,7 +556,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A53B89E42DD4CE8C00D4F21F /* Build configuration list for PBXProject "TodoApp" */ = {
+		A53B89E42DD4CE8C00D4F21F /* Build configuration list for PBXProject "DexterAI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A53B8A092DD4CE8E00D4F21F /* Debug */,
@@ -565,7 +565,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A53B8A0B2DD4CE8E00D4F21F /* Build configuration list for PBXNativeTarget "TodoApp" */ = {
+		A53B8A0B2DD4CE8E00D4F21F /* Build configuration list for PBXNativeTarget "DexterAI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A53B8A0C2DD4CE8E00D4F21F /* Debug */,
@@ -574,7 +574,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A53B8A0E2DD4CE8E00D4F21F /* Build configuration list for PBXNativeTarget "TodoAppTests" */ = {
+		A53B8A0E2DD4CE8E00D4F21F /* Build configuration list for PBXNativeTarget "DexterAITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A53B8A0F2DD4CE8E00D4F21F /* Debug */,
@@ -583,7 +583,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A53B8A112DD4CE8E00D4F21F /* Build configuration list for PBXNativeTarget "TodoAppUITests" */ = {
+		A53B8A112DD4CE8E00D4F21F /* Build configuration list for PBXNativeTarget "DexterAIUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A53B8A122DD4CE8E00D4F21F /* Debug */,

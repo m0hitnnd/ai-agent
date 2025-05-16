@@ -1,13 +1,13 @@
 //
-//  TodoAppUITestsLaunchTests.swift
-//  TodoAppUITests
+//  DexterAIUITestsLaunchTests.swift
+//  DexterAIUITests
 //
 //  Created by Mohitnnd on 5/14/25.
 //
 
 import XCTest
 
-final class TodoAppUITestsLaunchTests: XCTestCase {
+final class DexterAIUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

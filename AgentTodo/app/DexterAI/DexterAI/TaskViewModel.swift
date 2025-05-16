@@ -12,7 +12,7 @@ class TaskViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     
-    private let baseURL = "http://127.0.0.1:8000"
+    private let baseURL = "https://agent-todo-api.onrender.com"
     
     func fetchTasks() {
         guard let url = URL(string: "\(baseURL)/tasks") else { return }

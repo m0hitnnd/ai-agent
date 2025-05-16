@@ -52,7 +52,7 @@ struct ContentView: View {
                     .padding()
             }
         }
-        //.navigationTitle("Agent Todo")
+        //.navigationTitle("DexterAI")
         .alert(item: Binding(
             get: { viewModel.errorMessage.map { AlertItem(message: $0) } },
             set: { _ in viewModel.errorMessage = nil }

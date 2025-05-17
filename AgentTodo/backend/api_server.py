@@ -34,6 +34,9 @@ class Task(BaseModel):
     task: str
     time: Optional[int]
 
+class TaskUpdate(BaseModel):
+    task: str
+
 @app.get("/tasks", response_model=List[Task])
 def list_tasks():
     rows = db_utils.get_all_tasks_with_ids()
@@ -60,6 +63,28 @@ def delete_task(task_id: int):
     if deleted == 0:
         raise HTTPException(status_code=404, detail="Task not found")
     return {"detail": "Task deleted"}
+
+@app.put("/tasks/{task_id}", response_model=Task)
+def update_task(task_id: int, task_update: TaskUpdate):
+    # Get the existing task to verify it exists
+    existing_task = db_utils.get_task_by_id(task_id)
+    if not existing_task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    # Re-estimate time using LLM
+    analysis = get_llm_command_analysis(task_update.task)
+    estimated_time = analysis.get("estimated_time")
+    # Fallback if LLM fails to provide time
+    time_value = estimated_time if estimated_time is not None else 60
+    
+    # Update the task in the database
+    updated = db_utils.update_task(task_id, task_update.task, time_value)
+    if not updated:
+        raise HTTPException(status_code=500, detail="Failed to update task")
+    
+    # Get and return the updated task
+    updated_task = db_utils.get_task_by_id(task_id)
+    return Task(id=updated_task[0], task=updated_task[1], time=updated_task[2])
 
 # Add a simple health check endpoint
 @app.get("/health")

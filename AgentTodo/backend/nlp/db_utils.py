@@ -57,3 +57,17 @@ def remove_task_from_db(task):
         with closing(conn.cursor()) as c:
             c.execute('DELETE FROM tasks WHERE task LIKE ?', (f'%{task}%',))
         conn.commit()
+
+def get_task_by_id(task_id):
+    with sqlite3.connect(DB_PATH) as conn:
+        with closing(conn.cursor()) as c:
+            c.execute('SELECT id, task, time FROM tasks WHERE id = ?', (task_id,))
+            return c.fetchone()
+
+def update_task(task_id, new_task, new_time):
+    with sqlite3.connect(DB_PATH) as conn:
+        with closing(conn.cursor()) as c:
+            c.execute('UPDATE tasks SET task = ?, time = ? WHERE id = ?', 
+                     (new_task, new_time, task_id))
+            conn.commit()
+            return c.rowcount > 0

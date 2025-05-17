@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var viewModel = TaskViewModel()
+    @State private var editingTaskText: String = ""
+    @State private var showingEditSheet = false
     
     var body: some View {
         VStack {
@@ -45,6 +47,23 @@ struct ContentView: View {
                             .frame(width: 120, alignment: .trailing)
                     }
                 }
+                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    Button(role: .destructive) {
+                        viewModel.deleteTask(task)
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                }
+                .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                    Button {
+                        editingTaskText = task.task
+                        viewModel.editingTask = task
+                        showingEditSheet = true
+                    } label: {
+                        Label("Edit", systemImage: "pencil")
+                    }
+                    .tint(.blue)
+                }
             }
             
             if viewModel.isLoading {
@@ -52,7 +71,25 @@ struct ContentView: View {
                     .padding()
             }
         }
-        //.navigationTitle("DexterAI")
+        .sheet(isPresented: $showingEditSheet) {
+            NavigationView {
+                Form {
+                    TextField("Task", text: $editingTaskText)
+                }
+                .navigationTitle("Edit Task")
+                .navigationBarItems(
+                    leading: Button("Cancel") {
+                        showingEditSheet = false
+                    },
+                    trailing: Button("Save") {
+                        if let task = viewModel.editingTask {
+                            viewModel.updateTask(task, newTaskText: editingTaskText)
+                        }
+                        showingEditSheet = false
+                    }
+                )
+            }
+        }
         .alert(item: Binding(
             get: { viewModel.errorMessage.map { AlertItem(message: $0) } },
             set: { _ in viewModel.errorMessage = nil }

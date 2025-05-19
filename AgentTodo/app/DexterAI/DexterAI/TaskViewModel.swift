@@ -12,10 +12,47 @@ class TaskViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var editingTask: Task?
+    @Published var isEditSheetPresented = false
+    @Published var editingTaskText: String = ""
     
     private let baseURL = "https://agent-todo-api.onrender.com"
     
-    func fetchTasks() {
+    // MARK: - Public Actions
+    
+    func onAppear() {
+        fetchTasks()
+    }
+    
+    func onAddTaskTapped() {
+        guard !newTaskText.isEmpty else { return }
+        addTask()
+    }
+    
+    func onDeleteTaskTapped(_ task: Task) {
+        deleteTask(task)
+    }
+    
+    func onEditTaskTapped(_ task: Task) {
+        editingTask = task
+        editingTaskText = task.task
+        isEditSheetPresented = true
+    }
+    
+    func onEditTaskSaveTapped() {
+        guard let task = editingTask else { return }
+        updateTask(task, newTaskText: editingTaskText)
+        isEditSheetPresented = false
+    }
+    
+    func onEditTaskCancelTapped() {
+        isEditSheetPresented = false
+        editingTask = nil
+        editingTaskText = ""
+    }
+    
+    // MARK: - Private Business Logic
+    
+    private func fetchTasks() {
         guard let url = URL(string: "\(baseURL)/tasks") else { return }
         
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
@@ -40,8 +77,7 @@ class TaskViewModel: ObservableObject {
         }.resume()
     }
     
-    func addTask() {
-        guard !newTaskText.isEmpty else { return }
+    private func addTask() {
         isLoading = true
         
         guard let url = URL(string: "\(baseURL)/tasks") else { return }
@@ -69,7 +105,7 @@ class TaskViewModel: ObservableObject {
         }.resume()
     }
     
-    func deleteTask(_ task: Task) {
+    private func deleteTask(_ task: Task) {
         guard let url = URL(string: "\(baseURL)/tasks/\(task.id)") else { return }
         
         var request = URLRequest(url: url)
@@ -92,7 +128,7 @@ class TaskViewModel: ObservableObject {
         }.resume()
     }
     
-    func updateTask(_ task: Task, newTaskText: String) {
+    private func updateTask(_ task: Task, newTaskText: String) {
         guard let url = URL(string: "\(baseURL)/tasks/\(task.id)") else { return }
         
         let updatedTask = ["task": newTaskText]

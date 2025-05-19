@@ -2,8 +2,6 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var viewModel = TaskViewModel()
-    @State private var editingTaskText: String = ""
-    @State private var showingEditSheet = false
     
     var body: some View {
         VStack {
@@ -13,7 +11,7 @@ struct ContentView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 
                 Button(action: {
-                    viewModel.addTask()
+                    viewModel.onAddTaskTapped()
                 }) {
                     Text("Add Task")
                 }
@@ -49,16 +47,14 @@ struct ContentView: View {
                 }
                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                     Button(role: .destructive) {
-                        viewModel.deleteTask(task)
+                        viewModel.onDeleteTaskTapped(task)
                     } label: {
                         Label("Delete", systemImage: "trash")
                     }
                 }
                 .swipeActions(edge: .leading, allowsFullSwipe: false) {
                     Button {
-                        editingTaskText = task.task
-                        viewModel.editingTask = task
-                        showingEditSheet = true
+                        viewModel.onEditTaskTapped(task)
                     } label: {
                         Label("Edit", systemImage: "pencil")
                     }
@@ -71,21 +67,18 @@ struct ContentView: View {
                     .padding()
             }
         }
-        .sheet(isPresented: $showingEditSheet) {
+        .sheet(isPresented: $viewModel.isEditSheetPresented) {
             NavigationView {
                 Form {
-                    TextField("Task", text: $editingTaskText)
+                    TextField("Task", text: $viewModel.editingTaskText)
                 }
                 .navigationTitle("Edit Task")
                 .navigationBarItems(
                     leading: Button("Cancel") {
-                        showingEditSheet = false
+                        viewModel.onEditTaskCancelTapped()
                     },
                     trailing: Button("Save") {
-                        if let task = viewModel.editingTask {
-                            viewModel.updateTask(task, newTaskText: editingTaskText)
-                        }
-                        showingEditSheet = false
+                        viewModel.onEditTaskSaveTapped()
                     }
                 )
             }
@@ -97,7 +90,7 @@ struct ContentView: View {
             Alert(title: Text("Error"), message: Text(alertItem.message))
         }
         .onAppear {
-            viewModel.fetchTasks()
+            viewModel.onAppear()
         }
     }
 }

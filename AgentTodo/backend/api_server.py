@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 from typing import List, Optional
 import sys
@@ -37,10 +37,21 @@ class Task(BaseModel):
 class TaskUpdate(BaseModel):
     task: str
 
+class EstimatedTime(BaseModel):
+    estimated_time: int
+
 @app.get("/tasks", response_model=List[Task])
 def list_tasks():
     rows = db_utils.get_all_tasks_with_ids()
     return [Task(id=row[0], task=row[1], time=row[2]) for row in rows]
+
+@app.get("/estimate", response_model=EstimatedTime)
+def estimate_task_time(task: str = Query(..., description="The task to estimate time for")):
+    analysis = get_llm_command_analysis(task)
+    estimated_time = analysis.get("estimated_time")
+    # Fallback if LLM fails to provide time
+    time_value = estimated_time if estimated_time is not None else 60
+    return EstimatedTime(estimated_time=time_value)
 
 @app.post("/tasks", response_model=Task)
 def add_task(task: TaskCreate):

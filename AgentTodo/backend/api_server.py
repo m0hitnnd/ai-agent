@@ -33,9 +33,14 @@ class Task(BaseModel):
     id: int
     task: str
     time: Optional[int]
+    is_completed: bool = False
+    actual_time: Optional[int] = None
 
 class TaskUpdate(BaseModel):
     task: str
+
+class TaskComplete(BaseModel):
+    actual_time: int
 
 class EstimatedTime(BaseModel):
     estimated_time: int
@@ -43,7 +48,8 @@ class EstimatedTime(BaseModel):
 @app.get("/tasks", response_model=List[Task])
 def list_tasks():
     rows = db_utils.get_all_tasks_with_ids()
-    return [Task(id=row[0], task=row[1], time=row[2]) for row in rows]
+    return [Task(id=row[0], task=row[1], time=row[2], is_completed=row[3] if len(row) > 3 else False, 
+                actual_time=row[4] if len(row) > 4 else None) for row in rows]
 
 @app.get("/estimate", response_model=EstimatedTime)
 def estimate_task_time(task: str = Query(..., description="The task to estimate time for")):
@@ -67,6 +73,24 @@ def add_task(task: TaskCreate):
     db_utils.add_task_to_db(task.task, time_value)
     row = db_utils.get_last_inserted_task()
     return Task(id=row[0], task=row[1], time=row[2])
+
+@app.post("/tasks/{task_id}/complete", response_model=Task)
+def complete_task(task_id: int, task_complete: TaskComplete):
+    # Get the existing task to verify it exists
+    existing_task = db_utils.get_task_by_id(task_id)
+    if not existing_task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    # Update the task in the database to mark as completed and set actual time
+    updated = db_utils.complete_task(task_id, task_complete.actual_time)
+    if not updated:
+        raise HTTPException(status_code=500, detail="Failed to complete task")
+    
+    # Get and return the updated task
+    updated_task = db_utils.get_task_by_id(task_id)
+    return Task(id=updated_task[0], task=updated_task[1], time=updated_task[2], 
+                is_completed=updated_task[3] if len(updated_task) > 3 else True,
+                actual_time=updated_task[4] if len(updated_task) > 4 else task_complete.actual_time)
 
 @app.delete("/tasks/{task_id}")
 def delete_task(task_id: int):

@@ -9,11 +9,16 @@ struct Task: Identifiable, Codable {
 class TaskViewModel: ObservableObject {
     @Published var tasks: [Task] = []
     @Published var newTaskText: String = ""
+    @Published var newTaskEstimatedTime: String = ""
     @Published var isLoading = false
+    @Published var isEstimating = false
+    @Published var hasEstimation = false
     @Published var errorMessage: String?
     @Published var editingTask: Task?
     @Published var isEditSheetPresented = false
     @Published var editingTaskText: String = ""
+    @Published var editingTaskEstimatedTime: String = ""
+    @Published var isAddSheetPresented = false
     
     private let baseURL = "https://agent-todo-api.onrender.com"
     
@@ -23,9 +28,72 @@ class TaskViewModel: ObservableObject {
         fetchTasks()
     }
     
+    func onAddNewTaskTapped() {
+        newTaskText = ""
+        newTaskEstimatedTime = ""
+        hasEstimation = false
+        isAddSheetPresented = true
+    }
+    
+    func onAddTaskCancelTapped() {
+        isAddSheetPresented = false
+        newTaskText = ""
+        newTaskEstimatedTime = ""
+        hasEstimation = false
+    }
+    
     func onAddTaskTapped() {
         guard !newTaskText.isEmpty else { return }
         addTask()
+        isAddSheetPresented = false
+    }
+    
+    func onTaskTextChanged() {
+        // Reset estimation state when task text changes
+        if hasEstimation {
+            hasEstimation = false
+            newTaskEstimatedTime = ""
+        }
+    }
+    
+    func estimateTaskTime() {
+        guard !newTaskText.isEmpty else { return }
+        isEstimating = true
+        
+        // URL encode the task text for use in a query parameter
+        guard let encodedTask = newTaskText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: "\(baseURL)/estimate?task=\(encodedTask)") else {
+            isEstimating = false
+            errorMessage = "Failed to create request URL"
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            DispatchQueue.main.async {
+                self?.isEstimating = false
+                
+                if let error = error {
+                    self?.errorMessage = error.localizedDescription
+                    return
+                }
+                
+                guard let data = data else {
+                    self?.errorMessage = "No data received"
+                    return
+                }
+                
+                do {
+                    let result = try JSONDecoder().decode(EstimatedTimeResponse.self, from: data)
+                    self?.newTaskEstimatedTime = "\(result.estimated_time)"
+                    self?.hasEstimation = true
+                } catch {
+                    self?.errorMessage = "Failed to decode estimation"
+                }
+            }
+        }.resume()
     }
     
     func onDeleteTaskTapped(_ task: Task) {
@@ -35,6 +103,7 @@ class TaskViewModel: ObservableObject {
     func onEditTaskTapped(_ task: Task) {
         editingTask = task
         editingTaskText = task.task
+        editingTaskEstimatedTime = task.time != nil ? "\(task.time!)" : ""
         isEditSheetPresented = true
     }
     
@@ -48,6 +117,7 @@ class TaskViewModel: ObservableObject {
         isEditSheetPresented = false
         editingTask = nil
         editingTaskText = ""
+        editingTaskEstimatedTime = ""
     }
     
     // MARK: - Private Business Logic
@@ -82,8 +152,14 @@ class TaskViewModel: ObservableObject {
         
         guard let url = URL(string: "\(baseURL)/tasks") else { return }
         
-        let task = ["task": newTaskText]
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: task) else { return }
+        var taskData: [String: Any] = ["task": newTaskText]
+        
+        // Add estimated time if provided and valid
+        if !newTaskEstimatedTime.isEmpty, let timeValue = Int(newTaskEstimatedTime) {
+            taskData["time"] = timeValue
+        }
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: taskData) else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -100,6 +176,8 @@ class TaskViewModel: ObservableObject {
                 }
                 
                 self?.newTaskText = ""
+                self?.newTaskEstimatedTime = ""
+                self?.hasEstimation = false
                 self?.fetchTasks()
             }
         }.resume()
@@ -131,8 +209,14 @@ class TaskViewModel: ObservableObject {
     private func updateTask(_ task: Task, newTaskText: String) {
         guard let url = URL(string: "\(baseURL)/tasks/\(task.id)") else { return }
         
-        let updatedTask = ["task": newTaskText]
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: updatedTask) else { return }
+        var updatedTaskData: [String: Any] = ["task": newTaskText]
+        
+        // Add estimated time if provided and valid
+        if !editingTaskEstimatedTime.isEmpty, let timeValue = Int(editingTaskEstimatedTime) {
+            updatedTaskData["time"] = timeValue
+        }
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: updatedTaskData) else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "PUT"
@@ -162,6 +246,11 @@ class TaskViewModel: ObservableObject {
             }
         }.resume()
     }
+}
+
+// Response model for the estimation endpoint
+struct EstimatedTimeResponse: Decodable {
+    let estimated_time: Int
 }
 
 
